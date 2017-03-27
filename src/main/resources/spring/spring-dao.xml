@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+
+    <!--配置mybatis-->
+
+    <!--1,配置数据库相关参数 相当于configuration中的propertysource注解-->
+    <context:property-placeholder location="classpath:jdbc.properties" ignore-unresolvable="true"/>
+
+    <!--2,配置数据源-->
+    <bean id="dataSouorce" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <!--数据库驱动 -->
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <!--数据库连接地址-->
+        <property name="url" value="${jdbc.url}"/>
+        <!--用户-->
+        <property name="username" value="${jdbc.username}"/>
+        <!--密码-->
+        <property name="password" value="${jdbc.password}"/>
+
+        <!--配置初始化大小，最大，最小-->
+        <property name="initialSize" value="1"/>
+        <property name="minIdle" value="1"/>
+        <property name="maxActive" value="20"/>
+
+        <!--配置获取连接等待超时的时间-->
+        <property name="maxWait" value="60000"/>
+
+        <!--配置一个连接的最小生存时间-->
+        <property name="minEvictableIdleTimeMillis" value="300000"/>
+
+        <!--配置监控统计拦截的filters，wall用于防止sql注入，stat用于统计分析-->
+        <property name="filters" value="wall,stat"/>
+    </bean>
+
+    <!--3,配置SqlSessionFactoryBean-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--注入数据库连接池-->
+        <property name="dataSource" ref="dataSouorce"/>
+
+        <!--扫描entity包，获取简单的别名-->
+        <property name="typeAliasesPackage" value="entity"/>
+
+        <!--扫描mapper文件-->
+        <property name="mapperLocations" value="classpath:mapper/*.xml"/>
+
+        <!--配置mybatis全局配置文件-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+    </bean>
+
+    <!--4,扫描需要代理实现的dao接口，实现后注入到Spring容器-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--注入SqlSessionFactory-->
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        <!--配置自动扫描的包-->
+        <property name="basePackage" value="dao"/>
+        <!--配置扫描包内的带有Repository注解的接口，加强可读性-->
+        <property name="annotationClass" value="org.springframework.stereotype.Repository"/>
+    </bean>
+
+    <!--5,配置事务管理-->
+    <bean id="transationManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!--注入DataSource-->
+        <property name="dataSource" ref="dataSouorce"/>
+    </bean>
+
+    <!--注解管理事务-->
+    <tx:annotation-driven transaction-manager="transationManager" proxy-target-class="false"/>
+
+</beans>
+

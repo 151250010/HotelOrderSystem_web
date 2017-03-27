@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dao.ClientDao">
+
+    <!--一些客户类型的映射-->
+
+    <!--========================普通客户的映射========================-->
+    <resultMap id="normalClientMap" type="entity.client.NormalClient">
+        <!--主键-->
+        <id column="clientId" property="clientId" javaType="long" jdbcType="BIGINT"/>
+
+        <!--属性-->
+        <result column="clientName" property="clientName" javaType="String" jdbcType="VARCHAR"/>
+        <result column="isMan" property="isMan" javaType="Boolean" jdbcType="BOOLEAN"/>
+        <result column="identityId" property="identityId" javaType="String" jdbcType="VARCHAR"/>
+        <result column="phoneNumber" property="phoneNumber" javaType="String" jdbcType="VARCHAR"/>
+        <result column="creditPoint" property="creditPoint" javaType="Double" jdbcType="DOUBLE"/>
+    </resultMap>
+
+    <!--========================普通vip的映射========================-->
+    <resultMap id="normalVipMap" type="normalVip">
+        <id column="clientId" property="normalClient.clientId" javaType="long" jdbcType="BIGINT"/>
+
+        <result column="birthday" property="birthday" javaType="Date" jdbcType="DATE"/>
+        <result column="vipGrade" property="vipGrade" javaType="int" jdbcType="INTEGER"/>
+
+        <association property="normalClient" column="clientId"
+                     select="getNormalClient" fetchType="eager"/>
+    </resultMap>
+
+    <!--========================公司vip的映射========================-->
+    <resultMap id="companyVipMap" type="companyVip">
+        <id column="clientId" property="normalClient.clientId" javaType="long" jdbcType="BIGINT"/>
+
+        <association property="normalClient" column="clientId"
+                     select="getNormalClient" fetchType="eager"/>
+
+        <association property="company" column="companyId"
+                     select="dao.CompanyDao.getCompany"/>
+    </resultMap>
+
+    <insert id="addNormalClient" parameterType="normalClient" keyProperty="clientId" useGeneratedKeys="true">
+        INSERT into normalClient (clientId,clientName,isMan,identityId,phoneNumber,creditPoint)
+          VALUES (#{clientId,jdbcType=NUMERIC},#{clientName,jdbcType=VARCHAR},#{isMan,jdbcType=TINYINT},
+          #{identityId,jdbcType=VARCHAR},#{phoneNumber,jdbcType=VARCHAR},#{creditPoint,jdbcType=DOUBLE})
+    </insert>
+
+    <insert id="addNormalVip" parameterType="normalVip" keyProperty="clientId">
+        INSERT into normalVip (clientId,birthday,vipGrade) VALUES (#{normalClient.clientId},#{birthday},1)
+    </insert>
+
+    <insert id="addCompanyVip" parameterType="companyVip" keyProperty="clientId">
+        INSERT into companyVip (clientId,companyId) VALUES (#{normalClient.clientId},#{company.companyId})
+    </insert>
+
+    <update id="updateNormalClient" parameterType="normalClient" keyProperty="clientId" keyColumn="clientId">
+        UPDATE normalClient SET
+          clientName=#{clientName},
+          isMan=#{isMan,javaType=Boolean},
+          identityId=#{identityId},
+          phoneNumber=#{phoneNumber},
+          creditPoint=#{creditPoint} WHERE clientId=#{clientId}
+    </update>
+
+    <update id="updateNormalVipMessage" keyProperty="clientId" keyColumn="clientId">
+        UPDATE normalVip SET birthday=#{birthday},vipGrade=#{vipGrade} WHERE clientId=#{normalClient.clientId}
+    </update>
+
+    <select id="getNormalClient" parameterType="long" resultMap="normalClientMap">
+        SELECT * FROM normalClient WHERE clientId=#{clientId}
+    </select>
+
+    <select id="getNormalVip" parameterType="long" resultMap="normalVipMap">
+        SELECT clientId,birthday,vipGrade FROM normalVip WHERE clientId=#{clientId}
+    </select>
+
+    <select id="getCompanyVip" resultMap="companyVipMap">
+        SELECT clientId,companyId FROM companyVip WHERE clientId=#{clientId}
+    </select>
+
+    <select id="getClients" resultType="normalClient">
+        SELECT * FROM normalClient LIMIT #{limit} OFFSET #{offsets}
+    </select>
+
+    <select id="getNormalVips" resultMap="normalVipMap">
+        SELECT * FROM normalVip LIMIT #{limit} OFFSET #{offsets}
+    </select>
+
+    <select id="getCompanyVips" resultMap="companyVipMap">
+        SELECT * FROM companyVip LIMIT #{limit} OFFSET #{offsets}
+    </select>
+
+</mapper>
+

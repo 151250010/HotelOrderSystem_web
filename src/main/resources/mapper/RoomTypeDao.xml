@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dao.RoomTypeDao">
+
+    <insert id="addRoomTypeAndPrice" parameterType="roomTypeAndPrice">
+        INSERT INTO roomTypeAndPrice (hotelId,roomType,price) VALUES (#{hotelId},#{roomType},#{price})
+    </insert>
+
+    <update id="updateRoomPrice" parameterType="roomTypeAndPrice">
+        UPDATE roomTypeAndPrice SET price=#{price} WHERE hotelId=#{hotelId} AND roomType=#{roomType}
+    </update>
+
+    <delete id="deleteRoomTypeAndPrice" parameterType="roomTypeAndPrice">
+        DELETE FROM roomTypeAndPrice WHERE hotelId=#{hotelId} AND roomType=#{roomType}
+    </delete>
+
+    <select id="getRoomTypeAndPrice" resultType="roomTypeAndPrice">
+        SELECT * FROM roomTypeAndPrice WHERE hotelId=#{hotelId}
+    </select>
+</mapper>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="dao.CompanyDao">
+
+    <!--公司信息Map
+    <resultMap id="companyMap" type="company">
+        <id property="companyId" column="companyId"/>
+        
+        <result property="province" column="province"/>
+        <result property="city" column="city"/>
+        <result property="cbd" column="cbd"/>
+        <result property="concreteAddress" column="concreteAddress"/>
+        <result property="companyName" column="companyName"/>
+        
+    </resultMap>-->
+
+    <!--添加公司-->
+    <insert id="addCompany" keyProperty="companyId" useGeneratedKeys="true" parameterType="company">
+        INSERT INTO company (province,city,cbd,concreteAddress,companyName) VALUES (#{province},#{city},#{cbd},#{concreteAddress},#{companyName})
+    </insert>
+
+    <!--获取公司-->
+    <select id="getCompany" resultType="company" parameterType="long">
+       SELECT * FROM company
+    </select>
+
+    <!--从酒店表中获取合作酒店的id
+    <select id="getCooprationHotelByCompanyId" parameterType="long" resultType="long">
+        SELECT hotelId from cooperation WHERE companyId=#{companyId}
+    </select>-->
+</mapper>

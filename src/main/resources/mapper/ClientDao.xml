@@ -54,7 +54,7 @@
         INSERT into companyVip (clientId,companyId) VALUES (#{normalClient.clientId},#{company.companyId})
     </insert>
 
-    <update id="updateNormalClient" parameterType="normalClient" keyProperty="clientId" keyColumn="clientId">
+    <update id="updateNormalClient" parameterType="normalClient" keyProperty="clientId">
         UPDATE normalClient SET
           clientName=#{clientName},
           isMan=#{isMan,javaType=Boolean},
@@ -63,7 +63,7 @@
           creditPoint=#{creditPoint} WHERE clientId=#{clientId}
     </update>
 
-    <update id="updateNormalVipMessage" keyProperty="clientId" keyColumn="clientId">
+    <update id="updateNormalVipMessage" keyProperty="clientId">
         UPDATE normalVip SET birthday=#{birthday},vipGrade=#{vipGrade} WHERE clientId=#{normalClient.clientId}
     </update>
 

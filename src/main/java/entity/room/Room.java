@@ -17,18 +17,8 @@ public class Room {
     private int roomId;
 
     private Date orderedDate;
-
     private boolean hasChild;
     private int peopleLived;
-
-    public Room(long hotelId, String roomType, float price, RoomStateEnum stateEnum, int roomId, Date orderedDate) {
-        this.hotelId = hotelId;
-        this.roomType = roomType;
-        this.price = price;
-        this.stateEnum = stateEnum;
-        this.roomId = roomId;
-        this.orderedDate = orderedDate;
-    }
 
     public long getHotelId() {
         return hotelId;

@@ -9,43 +9,76 @@ import java.util.Date;
  */
 public class CreditRecord {
 
-    private Date date;
+    private Date concreteDate;
 
     private long clientId;
 
     private String orderId;
+
     private CreditCauseEnum creditCauseEnum;
 
-    public CreditRecord(Date date, long clientId, String orderId, CreditCauseEnum creditCauseEnum) {
-        this.date = date;
-        this.clientId = clientId;
-        this.orderId = orderId;
-        this.creditCauseEnum = creditCauseEnum;
+    private double changedCredit;
+
+    private boolean isIncreased;
+
+    public Date getConcreteDate() {
+        return concreteDate;
     }
 
-    public Date getDate() {
-        return date;
+    public void setConcreteDate(Date concreteDate) {
+        this.concreteDate = concreteDate;
     }
 
     public long getClientId() {
         return clientId;
     }
 
+    public void setClientId(long clientId) {
+        this.clientId = clientId;
+    }
+
     public String getOrderId() {
         return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 
     public CreditCauseEnum getCreditCauseEnum() {
         return creditCauseEnum;
     }
 
+    public void setCreditCauseEnum(CreditCauseEnum creditCauseEnum) {
+        this.creditCauseEnum = creditCauseEnum;
+    }
+
+
+    public double getChangedCredit() {
+        return changedCredit;
+    }
+
+    public void setChangedCredit(double changedCredit) {
+        this.changedCredit = changedCredit;
+    }
+
+    public boolean isIncreased() {
+        return isIncreased;
+    }
+
+    public void setIncreased(boolean increased) {
+        isIncreased = increased;
+    }
+
     @Override
     public String toString() {
         return "CreditRecord{" +
-                "date=" + date +
+                "concreteDate=" + concreteDate +
                 ", clientId=" + clientId +
                 ", orderId='" + orderId + '\'' +
                 ", creditCauseEnum=" + creditCauseEnum +
+                ", changedCredit=" + changedCredit +
+                ", isIncreased=" + isIncreased +
                 '}';
     }
 }

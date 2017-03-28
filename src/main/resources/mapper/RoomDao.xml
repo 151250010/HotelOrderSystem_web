@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dao.RoomDao">
+
+    <!--房间实体的映射-->
+    <resultMap id="roomMap" type="room">
+        <id column="hotelId" property="hotelId"/>
+        <id column="roomId" property="roomId"/>
+
+        <result property="stateEnum" column="stateEnum" javaType="enums.RoomStateEnum" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+        <result property="roomType" column="roomType"/>
+        <result property="price" column="price"/>
+        <result property="orderedDate" column="orderedDate"/>
+        <result property="hasChild" column="hasChild" javaType="boolean" jdbcType="TINYINT"/>
+        <result property="peopleLived" column="peopleLived"/>
+    </resultMap>
+
+    <insert id="addRoom" parameterType="room" keyProperty="hotelId,roomId">
+        INSERT INTO room (hotelId,roomId,stateEnum,roomType,price,orderedDate,hasChild,peopleLived)
+         VALUES (#{hotelId},#{roomId},#{stateEnum},#{roomType},#{price},#{orderedDate},#{hasChild},#{peopleLived})
+    </insert>
+
+    <update id="updateRoom" parameterType="room" keyProperty="hotelId,roomId">
+        UPDATE room SET
+          stateEnum=#{stateEnum},
+          roomType=#{roomType},
+          price=#{price},
+          orderedDate=#{orderedDate},
+          hasChild=#{hasChild},
+          peopleLived=#{peopleLived}
+        WHERE hotelId=#{hotelId} AND roomId=#{roomId}
+    </update>
+
+    <delete id="deleteRoom">
+        DELETE FROM room WHERE hotelId=#{hotelId} AND roomId=#{roomId}
+    </delete>
+
+    <select id="getRoom" resultMap="roomMap">
+        SELECT * FROM room WHERE hotelId=#{hotelId} AND roomId=#{roomId}
+    </select>
+
+    <select id="getRooms" resultMap="roomMap">
+        SELECT * FROM room WHERE hotelId=#{hotelId}
+    </select>
+</mapper>

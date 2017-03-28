@@ -18,4 +18,5 @@ public interface RoomTypeDao {
     void deleteRoomTypeAndPrice(RoomTypeAndPrice roomTypeAndPrice);
 
     List<RoomTypeAndPrice> getRoomTypeAndPrice(long hotelId);
+
 }

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dao.CreditDao">
+
+    <!--信用变化记录的映射-->
+    <resultMap id="creditRecordMap" type="creditRecord">
+
+        <!--四个主键-->
+        <id property="clientId" column="clientId"/>
+        <id property="concreteDate" column="concreteDate"/>
+        <id property="orderId" column="orderId"/>
+        <id property="creditCauseEnum" column="creditCauseEnum" javaType="enums.CreditCauseEnum" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+
+        <result property="changedCredit" column="change"/>
+        <result property="isIncreased" column="isIncreased" javaType="boolean" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="creditRecord">
+        INSERT INTO creditRecord (clientId,concreteDate,orderId,creditCauseEnum,changedCredit,isIncreased)
+          VALUES (#{clientId},#{concreteDate},#{orderId},#{creditCauseEnum},#{changedCredit},#{isIncreased})
+    </insert>
+
+    <select id="getCreditRecords" resultMap="creditRecordMap">
+        SELECT * FROM creditRecord WHERE clientId=#{clientId} LIMIT #{limit} OFFSET #{offsets}
+    </select>
+</mapper>

@@ -2,7 +2,6 @@ package dao;
 
 import entity.hotel.Hotel;
 import entity.hotel.HotelComment;
-import entity.hotel.RoomTypeAndPrice;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 

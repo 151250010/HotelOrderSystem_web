@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dao.OrderDao">
+
+    <resultMap id="orderMap" type="order">
+
+        <id property="orderId" column="orderId"/>
+
+        <result property="hotelId" column="hotelId"/>
+        <result property="clientId" column="clientId"/>
+
+        <result property="orderCreatedDate" column="orderCreatedDate" javaType="date" jdbcType="TIMESTAMP"/>
+        <result property="plannedLivedDate" column="plannedLivedDate" javaType="date" jdbcType="TIMESTAMP"/>
+        <result property="realLivedDate" column="realLivedDate" javaType="date" jdbcType="TIMESTAMP"/>
+        <result property="endDate" column="endDate" javaType="date" jdbcType="TIMESTAMP"/>
+        <result property="withdrawnDate" column="withdrawnDate" javaType="date" jdbcType="TIMESTAMP"/>
+
+        <result property="roomIds" column="roomIds"/>
+        <result property="price" column="price"/>
+        <result property="comment" column="comment"/>
+
+        <result property="orderStateEnum" column="orderStateEnum" javaType="enums.OrderStateEnum" jdbcType="VARCHAR"
+                typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+    </resultMap>
+
+    <insert id="addOrder" parameterType="order">
+        INSERT INTO t_order (orderId,hotelId,clientId,orderCreatedDate,plannedLivedDate,realLivedDate,endDate,withdrawnDate,roomIds,price,comment,orderStateEnum)
+              VALUES (#{orderId},#{hotelId},#{clientId},#{orderCreatedDate},#{plannedLivedDate},#{realLivedDate},
+              #{endDate},#{withdrawnDate},#{roomIds},#{price},#{comment},#{orderStateEnum})
+    </insert>
+
+    <update id="updateOrder" parameterType="order">
+        UPDATE t_order SET
+          realLivedDate=#{realLivedDate},
+          endDate=#{endDate},
+          withdrawnDate=#{withdrawnDate},
+          comment=#{comment},
+          orderStateEnum=#{orderStateEnum}
+          WHERE orderId=#{orderId}
+    </update>
+
+    <select id="getOrder" resultMap="orderMap">
+        SELECT * FROM t_order WHERE orderId=#{orderId}
+    </select>
+
+    <select id="getClientOrders" resultMap="orderMap">
+        SELECT * FROM t_order WHERE clientId=#{clientId} LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="getClientOrdersInHotel" resultMap="orderMap">
+        SELECT * FROM t_order WHERE clientId=#{clientId} AND hotelId=#{hotelId}
+    </select>
+
+    <select id="getHotelOrders" resultMap="orderMap">
+        SELECT * FROM t_order WHERE hotelId=#{hotelId} LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="getTodayOrder" resultMap="orderMap">
+        SELECT * FROM t_order WHERE DATE_FORMAT(orderCreatedDate,'%Y-%m-%d')=#{today} AND hotelId=#{hotelId}
+    </select>
+
+    <select id="getAllOrdersToday" resultMap="orderMap">
+        SELECT * FROM t_order WHERE DATE_FORMAT(orderCreatedDate,'%Y-%m-%d')=#{today} LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="getOrderByDate" resultMap="orderMap">
+        SELECT * FROM t_order WHERE DATE_FORMAT(orderCreatedDate,'%Y-%m-%d')=#{concreteDate}
+    </select>
+
+    <select id="getOrderByClientId" resultMap="orderMap">
+        SELECT * FROM t_order WHERE clientId=#{clientId}
+    </select>
+
+    <select id="getOrderTodayByState" resultMap="orderMap">
+        select * from t_order WHERE orderStateEnum=#{state} AND DATE_FORMAT(orderCreatedDate,'%Y-%m-%d')=#{today};
+    </select>
+</mapper>

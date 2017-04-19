@@ -3,7 +3,7 @@ package entity.client;
 import java.util.Date;
 
 /**
- * Created by xihao on 17-3-25.
+ * 普通会员的实体类
  */
 public class NormalVip {
 
@@ -36,7 +36,6 @@ public class NormalVip {
     public void setNormalClient(NormalClient normalClient) {
         this.normalClient = normalClient;
     }
-
 
     @Override
     public String toString() {

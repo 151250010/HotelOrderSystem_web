@@ -3,7 +3,7 @@ package entity.company;
 import java.util.List;
 
 /**
- * Created by xihao on 17-3-25.
+ * company实体类
  */
 public class Company {
 

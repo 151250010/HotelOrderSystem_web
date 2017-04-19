@@ -11,17 +11,17 @@ public class BasePromotion {
     private String proName;
     private String introduction;
 
-    private Date bedinDate;
+    private Date beginDate;
     private Date endDate;
 
     private int minRoomNum;
     private float discount;
 
-    public BasePromotion(String promotionId, String proName, String introduction, Date bedinDate, Date endDate, int minRoomNum, float discount) {
+    public BasePromotion(String promotionId, String proName, String introduction, Date beginDate, Date endDate, int minRoomNum, float discount) {
         this.promotionId = promotionId;
         this.proName = proName;
         this.introduction = introduction;
-        this.bedinDate = bedinDate;
+        this.beginDate = beginDate;
         this.endDate = endDate;
         this.minRoomNum = minRoomNum;
         this.discount = discount;
@@ -31,7 +31,7 @@ public class BasePromotion {
         this.promotionId = promotionId;
         this.proName = proName;
         this.introduction = introduction;
-        this.bedinDate = bedinDate;
+        this.beginDate = bedinDate;
         this.endDate = endDate;
         this.discount = discount;
         this.minRoomNum=1;
@@ -50,7 +50,7 @@ public class BasePromotion {
     }
 
     public Date getBedinDate() {
-        return bedinDate;
+        return beginDate;
     }
 
     public Date getEndDate() {

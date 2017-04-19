@@ -21,7 +21,6 @@
     <!--========================普通vip的映射========================-->
     <resultMap id="normalVipMap" type="normalVip">
         <id column="clientId" property="normalClient.clientId" javaType="long" jdbcType="BIGINT"/>
-
         <result column="birthday" property="birthday" javaType="Date" jdbcType="DATE"/>
         <result column="vipGrade" property="vipGrade" javaType="int" jdbcType="INTEGER"/>
 
@@ -51,7 +50,7 @@
     </insert>
 
     <insert id="addCompanyVip" parameterType="companyVip" keyProperty="clientId">
-        INSERT into companyVip (clientId,companyId) VALUES (#{normalClient.clientId},#{company.companyId})
+        INSERT into companyVip (clientId,companyId) VALUES (#{clientId},#{companyId})
     </insert>
 
     <update id="updateNormalClient" parameterType="normalClient" keyProperty="clientId">

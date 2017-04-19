@@ -44,16 +44,12 @@ public class ClientDaoTest {
         assertEquals("xihao",clientDao.getNormalClient(2).getClientName());
     }
 
-    public void addNormalVipTets() throws Exception{
+    public void addNormalVipTests() throws Exception{
 
         NormalClient client = clientDao.getNormalClient(2);
-        NormalVip vip = new NormalVip();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date date = sdf.parse("1996-10-20");
-        vip.setBirthday(date);
-        vip.setNormalClient(client);
-        vip.setVipGrade(1);
-
+        NormalVip vip = new NormalVip();
         clientDao.addNormalVip(vip);
     }
 
@@ -61,21 +57,14 @@ public class ClientDaoTest {
     public void getNormalVip() throws Exception{
 
 //        System.out.println(clientDao.getNormalVip(2).toString());
-        assertEquals("NormalVip{normalClient=NormalClient{id=2, clientName='xihao', isMan=true, identityId='123456789123456798', phoneNumber='13927501605', creditPoint=0.0}, vipGrade=1, birthday=Sun Oct 20 00:00:00 CST 1996}"
+        assertEquals("NormalVip{normalClient=NormalClient{id=2, clientName='xihao', isMan=true, identityId='123456789123456798', phoneNumber='13927501605', creditPoint=100.0}, vipGrade=1, birthday=Sun Oct 20 00:00:00 CST 1996}"
         ,clientDao.getNormalVip(2).toString());
     }
 
     //@Test
     public void addCompanyVipTest() throws Exception{
 
-        Company company = companyDao.getCompany(1);
-        CompanyVip companyVip = new CompanyVip();
-
-        NormalClient client = clientDao.getNormalClient(2);
-        companyVip.setCompany(company);
-        companyVip.setNormalClient(client);
-
-        clientDao.addCompanyVip(companyVip);
+        clientDao.addCompanyVip(2,1);
     }
 
     @Test

@@ -33,12 +33,11 @@ public interface ClientDao {
 
     /**
      * 添加企业会员，数据层操作确认传入的company存在并且client有效
-     * @param companyVip 企业会员
      */
-    void addCompanyVip(CompanyVip companyVip);
+    void addCompanyVip(@Param("clientId") long clientId,@Param("companyId")long companyId);
 
     /**
-     * normally cover all the columes though only a property has been changed
+     * normally cover all the columns though only a property has been changed
      * @param client
      */
     void updateNormalClient(NormalClient client);

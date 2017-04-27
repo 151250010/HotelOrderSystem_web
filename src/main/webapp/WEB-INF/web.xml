@@ -48,4 +48,14 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <!--================配置请求设置器===================-->
+    <filter>
+        <filter-name>setContent</filter-name>
+        <filter-class>webcontext.SetContent</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>setContent</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 </web-app>

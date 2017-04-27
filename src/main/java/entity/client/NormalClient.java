@@ -1,26 +1,29 @@
 package entity.client;
 
-import org.apache.ibatis.type.Alias;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 
 /**
- * Created by xihao on 17-3-25.
+ * the entity of normal client
+ * use the phone number as the unique id for the user
  */
 public class NormalClient {
 
-    private long clientId;
+//    private long clientId;
+
+    @NotNull(message = "Client Name could not be null")
     private String clientName;
+
+    @NotNull(message = "male or female could not be null")
     private boolean isMan;
+
     private String identityId;
+
+    @NotNull(message = "Phone number could not be null")
     private String phoneNumber;
+
+    @Null
     private double creditPoint;
-
-    public long getClientId() {
-        return clientId;
-    }
-
-    public void setClientId(long clientId) {
-        this.clientId = clientId;
-    }
 
     public String getClientName() {
         return clientName;
@@ -62,12 +65,10 @@ public class NormalClient {
         this.creditPoint = creditPoint;
     }
 
-
     @Override
     public String toString() {
         return "NormalClient{" +
-                "id=" + clientId +
-                ", clientName='" + clientName + '\'' +
+                "clientName='" + clientName + '\'' +
                 ", isMan=" + isMan +
                 ", identityId='" + identityId + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +

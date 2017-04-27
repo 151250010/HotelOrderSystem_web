@@ -1,19 +1,17 @@
 package controllers.user;
 
+import com.alibaba.fastjson.JSONObject;
 import dto.BaseResult;
 import dto.ClientVO;
-import entity.company.Company;
-import exception.ClientNotFoundException;
+import entity.client.NormalClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import service.client.ClientService;
 
-import java.util.Date;
+import javax.validation.Valid;
 
 
 /**
@@ -30,38 +28,56 @@ public class UserController {
 
     /**
      * 获得客户基本信息
-     * @param clientId
+     * @param phoneNumber 客户手机号
      * @return
      */
-    @RequestMapping(value = "/{clientId}", method = RequestMethod.GET,produces = "application/json;charset=UTF-8") //在响应体中返回资源状态
+    @RequestMapping(value = "/{phoneNumber}", method = RequestMethod.GET,produces = "application/json;charset=UTF-8") //在响应体中返回资源状态
     //表明只处理预期输出为json的请求，也就是说只处理Accept头部信息包含"application/json"的请求
-    public BaseResult<ClientVO> getClient(@PathVariable long clientId) {
-        ClientVO clientVO = clientService.getClientInfo(clientId);
+    public BaseResult<ClientVO> getClient(@PathVariable String phoneNumber) {
+        ClientVO clientVO = clientService.getClientInfo(phoneNumber);
         return new BaseResult<>(true, clientVO);
     }
 
     /**
      * 申请普通会员
-     * @param clientId
-     * @param birthday
+     * @param body 前台传来的json对象
      * @return
      */
-    @RequestMapping(value = "/vip/normal/{clientId}", method = RequestMethod.POST, consumes = "application/json")
-    public BaseResult applyForVip(@PathVariable long clientId, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date birthday) {
-        //处理传递来的申请vip的请求，DateTimeFormat注解是进行格式的转换
-        clientService.applyForNormalVip(clientId, birthday);
+    @RequestMapping(value = "/vip/normalvip", method = RequestMethod.POST, consumes = "application/json")
+    public BaseResult applyForVip(@RequestBody JSONObject body) {
+
+        System.out.println(body.get("phoneNumber"));
+        System.out.println(body.get("birthday"));
+
         return new BaseResult(true,null);
     }
 
     /**
      * 申请公司会员
-     * @param clientId
-     * @param companyId
+     * @param body 使用JSONObject 处理输入 但是接收不会对接收的输入进行判断
      * @return
      */
-    @RequestMapping(value = "/vip/companyvip/{clientId}",method = RequestMethod.POST)
-    public BaseResult applyForCompanyVip(@PathVariable long clientId, @RequestParam long companyId) {
+    @RequestMapping(value = "/vip/companyvip",method = RequestMethod.POST,consumes = "application/json")
+    /*@RequestBody Map<String,Long> params 也可以考虑使用map来接收单个值*/
+    public BaseResult applyForCompanyVip(@RequestBody JSONObject body) {
 
+        System.out.println(body.get("companyId"));
+//        clientService.applyForCompanyVip(phoneNumber, companyId);
         return new BaseResult(true, null);
     }
+
+    /**
+     * 添加新的用户
+     * @param normalClient 客户基本信息
+     * @return 是否成功以及客户信息
+     */
+    @PostMapping(consumes = "application/json")
+    public BaseResult postNormalClient(@RequestBody @Valid NormalClient normalClient,Errors errors) {
+
+//        clientService.addClient(normalClient);
+//        return new BaseResult(true)
+        return new BaseResult<>(true,"Add a client successfully!");
+    }
+
+
 }

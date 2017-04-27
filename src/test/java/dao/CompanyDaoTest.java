@@ -1,5 +1,6 @@
 package dao;
 
+import entity.company.Company;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class CompanyDaoTest {
     @Autowired
     private CompanyDao companyDao;
 
-   /* @Test
+    @Test
     public void addCompanyTest() throws Exception{
 
         Company company = new Company();
@@ -29,7 +30,7 @@ public class CompanyDaoTest {
         company.setCompanyName("星河公司");
 
         companyDao.addCompany(company);
-    }*/
+    }
 
     @Test
     public void getCompanyTest() throws Exception{

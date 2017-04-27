@@ -8,74 +8,72 @@
     <!--========================普通客户的映射========================-->
     <resultMap id="normalClientMap" type="entity.client.NormalClient">
         <!--主键-->
-        <id column="clientId" property="clientId" javaType="long" jdbcType="BIGINT"/>
+        <id column="phoneNumber" property="phoneNumber" javaType="String" jdbcType="VARCHAR"/>
 
         <!--属性-->
         <result column="clientName" property="clientName" javaType="String" jdbcType="VARCHAR"/>
         <result column="isMan" property="isMan" javaType="Boolean" jdbcType="BOOLEAN"/>
         <result column="identityId" property="identityId" javaType="String" jdbcType="VARCHAR"/>
-        <result column="phoneNumber" property="phoneNumber" javaType="String" jdbcType="VARCHAR"/>
         <result column="creditPoint" property="creditPoint" javaType="Double" jdbcType="DOUBLE"/>
     </resultMap>
 
     <!--========================普通vip的映射========================-->
     <resultMap id="normalVipMap" type="normalVip">
-        <id column="clientId" property="normalClient.clientId" javaType="long" jdbcType="BIGINT"/>
+        <id column="phoneNumber" property="normalClient.phoneNumber" javaType="String" jdbcType="VARCHAR"/>
         <result column="birthday" property="birthday" javaType="Date" jdbcType="DATE"/>
         <result column="vipGrade" property="vipGrade" javaType="int" jdbcType="INTEGER"/>
 
-        <association property="normalClient" column="clientId"
+        <association property="normalClient" column="phoneNumber"
                      select="getNormalClient" fetchType="eager"/>
     </resultMap>
 
     <!--========================公司vip的映射========================-->
     <resultMap id="companyVipMap" type="companyVip">
-        <id column="clientId" property="normalClient.clientId" javaType="long" jdbcType="BIGINT"/>
+        <id column="phoneNumber" property="normalClient.phoneNumber" javaType="String" jdbcType="VARCHAR"/>
 
-        <association property="normalClient" column="clientId"
+        <association property="normalClient" column="phoneNumber"
                      select="getNormalClient" fetchType="eager"/>
 
         <association property="company" column="companyId"
                      select="dao.CompanyDao.getCompany"/>
     </resultMap>
 
-    <insert id="addNormalClient" parameterType="normalClient" keyProperty="clientId" useGeneratedKeys="true">
-        INSERT into normalClient (clientId,clientName,isMan,identityId,phoneNumber,creditPoint)
-          VALUES (#{clientId,jdbcType=NUMERIC},#{clientName,jdbcType=VARCHAR},#{isMan,jdbcType=TINYINT},
+    <insert id="addNormalClient" parameterType="normalClient" keyProperty="phoneNumber" useGeneratedKeys="false">
+        INSERT into normalClient (clientName,isMan,identityId,phoneNumber,creditPoint)
+          VALUES (#{clientName,jdbcType=VARCHAR},#{isMan,jdbcType=TINYINT},
           #{identityId,jdbcType=VARCHAR},#{phoneNumber,jdbcType=VARCHAR},#{creditPoint,jdbcType=DOUBLE})
     </insert>
 
-    <insert id="addNormalVip" parameterType="normalVip" keyProperty="clientId">
-        INSERT into normalVip (clientId,birthday,vipGrade) VALUES (#{normalClient.clientId},#{birthday},1)
+    <insert id="addNormalVip" parameterType="normalVip" keyProperty="phoneNumber">
+        INSERT into normalVip (phoneNumber,birthday,vipGrade) VALUES (#{normalClient.phoneNumber},#{birthday},1)
     </insert>
 
-    <insert id="addCompanyVip" parameterType="companyVip" keyProperty="clientId">
-        INSERT into companyVip (clientId,companyId) VALUES (#{clientId},#{companyId})
+    <insert id="addCompanyVip" parameterType="companyVip" keyProperty="phoneNumber">
+        INSERT into companyVip (phoneNumber,companyId) VALUES (#{phoneNumber},#{companyId})
     </insert>
 
-    <update id="updateNormalClient" parameterType="normalClient" keyProperty="clientId">
+    <update id="updateNormalClient" parameterType="normalClient" keyProperty="phoneNumber">
         UPDATE normalClient SET
           clientName=#{clientName},
           isMan=#{isMan,javaType=Boolean},
           identityId=#{identityId},
-          phoneNumber=#{phoneNumber},
-          creditPoint=#{creditPoint} WHERE clientId=#{clientId}
+          creditPoint=#{creditPoint} WHERE phoneNumber=#{phoneNumber}
     </update>
 
     <update id="updateNormalVipMessage" keyProperty="clientId">
         UPDATE normalVip SET birthday=#{birthday},vipGrade=#{vipGrade} WHERE clientId=#{normalClient.clientId}
     </update>
 
-    <select id="getNormalClient" parameterType="long" resultMap="normalClientMap">
-        SELECT * FROM normalClient WHERE clientId=#{clientId}
+    <select id="getNormalClient" parameterType="String" resultMap="normalClientMap">
+        SELECT * FROM normalClient WHERE phoneNumber=#{phoneNumber}
     </select>
 
-    <select id="getNormalVip" parameterType="long" resultMap="normalVipMap">
-        SELECT clientId,birthday,vipGrade FROM normalVip WHERE clientId=#{clientId}
+    <select id="getNormalVip" parameterType="String" resultMap="normalVipMap">
+        SELECT phoneNumber,birthday,vipGrade FROM normalVip WHERE phoneNumber=#{phoneNumber}
     </select>
 
     <select id="getCompanyVip" resultMap="companyVipMap">
-        SELECT clientId,companyId FROM companyVip WHERE clientId=#{clientId}
+        SELECT phoneNumber,companyId FROM companyVip WHERE phoneNumber=#{phoneNumber}
     </select>
 
     <select id="getClients" resultType="normalClient">

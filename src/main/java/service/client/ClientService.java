@@ -1,9 +1,9 @@
 package service.client;
 
-import com.sun.deploy.util.SessionState;
 import dto.ClientVO;
 import entity.client.NormalClient;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -13,25 +13,25 @@ public interface ClientService {
 
     /**
      * return null if the client does not exist
-     * @param clientId
+     * @param phoneNumber 手机号码
      * @return
      */
-    ClientVO getClientInfo(long clientId);
+    ClientVO getClientInfo(String phoneNumber);
 
     /**
      * apply for normal vip
-     * @param clientId 客户编号
+     * @param phoneNumber 手机号码
      * @param birthday 生日
      * @return false when fail to apply for vip ,true means success
      */
-    void applyForNormalVip(long clientId, Date birthday);
+    void applyForNormalVip(String phoneNumber, Date birthday);
 
     /**
      * apply for company vip
-     * @param clientId the id of client
+     * @param phoneNumber 客户电话
      * @param companyId the id of company
      */
-    void applyForCompanyVip(long clientId, long companyId);
+    void applyForCompanyVip(String phoneNumber, long companyId);
 
     /**
      * insert the new client

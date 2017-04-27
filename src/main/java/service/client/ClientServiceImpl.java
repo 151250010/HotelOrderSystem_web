@@ -27,15 +27,15 @@ public class ClientServiceImpl implements ClientService {
     private CompanyDao companyDao;
 
     @Override
-    public ClientVO getClientInfo(long clientId) {
+    public ClientVO getClientInfo(String phoneNumber) {
 
-        NormalClient normalClient = clientDao.getNormalClient(clientId);
+        NormalClient normalClient = clientDao.getNormalClient(phoneNumber);
         if (normalClient == null) {
-            throw new ClientNotFoundException(clientId);
+            throw new ClientNotFoundException(phoneNumber);
         }
 
-        NormalVip normalVip = clientDao.getNormalVip(clientId);
-        CompanyVip companyVip = clientDao.getCompanyVip(clientId);
+        NormalVip normalVip = clientDao.getNormalVip(phoneNumber);
+        CompanyVip companyVip = clientDao.getCompanyVip(phoneNumber);
 
         ClientVO clientVO = null;
         if (normalVip == null) {
@@ -53,15 +53,15 @@ public class ClientServiceImpl implements ClientService {
     /**
      * apply for normal vip
      *
-     * @param clientId 客户编号
+     * @param phoneNumber 客户编号
      * @param birthday 生日
      */
     @Override
-    public void applyForNormalVip(long clientId, Date birthday) {
+    public void applyForNormalVip(String phoneNumber, Date birthday) {
 
-        NormalClient normalClient = clientDao.getNormalClient(clientId);
+        NormalClient normalClient = clientDao.getNormalClient(phoneNumber);
         if (normalClient == null) {
-            throw new ClientNotFoundException(clientId);
+            throw new ClientNotFoundException(phoneNumber);
         }
         NormalVip normalVip = new NormalVip();
         normalVip.setBirthday(birthday);
@@ -73,32 +73,32 @@ public class ClientServiceImpl implements ClientService {
     /**
      * apply for company vip
      *
-     * @param clientId  the id of client
+     * @param phoneNumber  the id of client
      * @param companyId the id of company
      */
     @Override
-    public void applyForCompanyVip(long clientId, long companyId) {
+    public void applyForCompanyVip(String phoneNumber, long companyId) {
 
-        NormalClient normalClient = clientDao.getNormalClient(clientId);
+        NormalClient normalClient = clientDao.getNormalClient(phoneNumber);
         if (normalClient == null) {
-            throw new ClientNotFoundException(clientId);
+            throw new ClientNotFoundException(phoneNumber);
         }
         Company company = companyDao.getCompany(companyId);
         if (company == null) {
             throw new CompanyNotFoundException(companyId);
         }
-        clientDao.addCompanyVip(clientId,companyId);
+        clientDao.addCompanyVip(phoneNumber,companyId);
     }
 
     /**
      * insert the new client
      *
-     * @param normalClient 新会员
+     * @param normalClient 新客户
      */
     @Override
     public void addClient(NormalClient normalClient) {
 
-
+        clientDao.addNormalClient(normalClient);
     }
 
 }

@@ -22,7 +22,7 @@
 
     <!--获取公司-->
     <select id="getCompany" resultType="company" parameterType="long">
-       SELECT * FROM company
+       SELECT * FROM company WHERE companyId=#{companyId}
     </select>
 
     <!--从酒店表中获取合作酒店的id

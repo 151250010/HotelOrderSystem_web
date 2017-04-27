@@ -12,7 +12,6 @@ import java.util.Date;
  */
 public class ClientVO {
 
-    private long clientId;
     private String clientName;
     private boolean isMan;
     private String identityId;
@@ -34,7 +33,6 @@ public class ClientVO {
 
         NormalClient normalClient = normalVip.getNormalClient();
 
-        this.clientId = normalClient.getClientId();
         this.clientName = normalClient.getClientName();
         this.isMan = normalClient.isMan();
         this.identityId = normalClient.getIdentityId();
@@ -52,7 +50,6 @@ public class ClientVO {
      * @param normalClient 普通客户
      */
     public ClientVO(NormalClient normalClient) {
-        this.clientId = normalClient.getClientId();
         this.clientName = normalClient.getClientName();
         this.isMan = normalClient.isMan();
         this.identityId = normalClient.getIdentityId();
@@ -68,7 +65,6 @@ public class ClientVO {
 
         NormalClient normalClient = normalVip.getNormalClient();
 
-        this.clientId = normalClient.getClientId();
         this.clientName = normalClient.getClientName();
         this.isMan = normalClient.isMan();
         this.identityId = normalClient.getIdentityId();
@@ -87,7 +83,6 @@ public class ClientVO {
 
         NormalClient normalClient = companyVip.getNormalClient();
 
-        this.clientId = normalClient.getClientId();
         this.clientName = normalClient.getClientName();
         this.isMan = normalClient.isMan();
         this.identityId = normalClient.getIdentityId();
@@ -96,15 +91,6 @@ public class ClientVO {
 
         this.company = companyVip.getCompany();
     }
-
-    public long getClientId() {
-        return clientId;
-    }
-
-    public void setClientId(long clientId) {
-        this.clientId = clientId;
-    }
-
     public String getClientName() {
         return clientName;
     }

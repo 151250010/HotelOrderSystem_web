@@ -16,8 +16,10 @@ public enum ResultEnum {
 
     //用户相关异常
     INVALID_USER(10010001, "无效用户"),
-    CLIENT_NOT_FOUND(10010002, "找不到用户");
-    
+    CLIENT_NOT_FOUND(10010002, "找不到用户"),
+    CLIENT_NOT_VALID(10010003, "参数不正确");
+
+
     private int state;
     private String message;
 

@@ -12,17 +12,17 @@ public class BaseResult<T> implements Serializable {
     private static final long serialVersionUID = -4185151304730685014L;
 
     private boolean success;
-    private String error;
+    private String message;
     private T data;
 
     /**
      * 发生错误的构造函数
      * @param success 是否成功
-     * @param error 错误信息
+     * @param message 错误信息
      */
-    public BaseResult(boolean success, String error) {
+    public BaseResult(boolean success, String message) {
         this.success = success;
-        this.error = error;
+        this.message = message;
     }
 
     /**
@@ -43,12 +43,12 @@ public class BaseResult<T> implements Serializable {
         this.success = success;
     }
 
-    public String getError() {
-        return error;
+    public String getmessage() {
+        return message;
     }
 
-    public void setError(String error) {
-        this.error = error;
+    public void setmessage(String message) {
+        this.message = message;
     }
 
     public T getData() {

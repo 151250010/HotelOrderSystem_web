@@ -4,20 +4,18 @@ import entity.client.CompanyVip;
 import entity.client.NormalClient;
 import entity.client.NormalVip;
 import entity.company.Company;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import utils.DateUtils;
 
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
-import static org.junit.Assert.*;
-
-/**
- * Created by xihao on 17-3-27.
- */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:spring/spring-dao.xml")
 public class ClientDaoTest {
@@ -28,88 +26,145 @@ public class ClientDaoTest {
     @Autowired
     private CompanyDao companyDao;
 
-
-   /* public void addNormalClient() throws Exception {
-
-        NormalClient client = new NormalClient(2,"xihao",true,"123456789123456798","13927501605"
-        ,0);
-
-        clientDao.addNormalClient(client);
-
-    }*/
-
     @Test
-    public void getNormalClientTest() throws Exception{
+    public void addNormalClientTest() throws Exception {
 
-        assertEquals("xihao",clientDao.getNormalClient(2).getClientName());
-    }
+        NormalClient normalClient = new NormalClient();
+        normalClient.setCreditPoint(100);
+        normalClient.setClientName("Xihao");
+        normalClient.setIdentityId("123123132");
+        normalClient.setPhoneNumber("13927501605");
+        normalClient.setIsMan(false);
+        try {
+            clientDao.addNormalClient(normalClient);
+//            Assert.fail();
+        } catch (Exception e) {
+            Assert.assertTrue(e instanceof DuplicateKeyException);
+        }
 
-    public void addNormalVipTests() throws Exception{
 
-        NormalClient client = clientDao.getNormalClient(2);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = sdf.parse("1996-10-20");
-        NormalVip vip = new NormalVip();
-        clientDao.addNormalVip(vip);
     }
 
     @Test
-    public void getNormalVip() throws Exception{
+    public void addNormalClientTest_1() throws Exception {
 
-//        System.out.println(clientDao.getNormalVip(2).toString());
-        assertEquals("NormalVip{normalClient=NormalClient{id=2, clientName='xihao', isMan=true, identityId='123456789123456798', phoneNumber='13927501605', creditPoint=100.0}, vipGrade=1, birthday=Sun Oct 20 00:00:00 CST 1996}"
-        ,clientDao.getNormalVip(2).toString());
-    }
+        NormalClient normalClient = new NormalClient();
+        normalClient.setCreditPoint(100);
+        normalClient.setClientName("Xihao");
+        normalClient.setIdentityId("123123132");
+        normalClient.setPhoneNumber("13927501601");
+        normalClient.setIsMan(false);
+        clientDao.addNormalClient(normalClient);
 
-    //@Test
-    public void addCompanyVipTest() throws Exception{
-
-        clientDao.addCompanyVip(2,1);
-    }
-
-    @Test
-    public void getCompanyVipTest() throws Exception{
-
-        System.out.println(clientDao.getCompanyVip(2));
     }
 
     @Test
-    public void getCompanyVipTest2() throws Exception{
+    public void addNormalClient_test2() throws Exception {
 
-        System.out.println(clientDao.getCompanyVip(3));
+        NormalClient normalClient = new NormalClient();
+        normalClient.setCreditPoint(120);
+        normalClient.setClientName("Xihao");
+        normalClient.setIdentityId("123123132");
+        normalClient.setPhoneNumber("13927501600");
+        normalClient.setIsMan(false);
+        clientDao.addNormalClient(normalClient);
+
     }
 
     @Test
-    public void updateNormalClientTest() throws Exception{
+    public void getNormalClientTest() throws Exception {
 
-        NormalClient client = clientDao.getNormalClient(2);
-        client.setCreditPoint(100);
-        clientDao.updateNormalClient(client);
+        String phoneNumber = "13927501605";
+        System.out.println(clientDao.getNormalClient(phoneNumber));
     }
 
     @Test
-    public void updateNormalVip() throws Exception{
+    public void addNormalVipTest() throws Exception {
 
-        NormalVip vip = clientDao.getNormalVip(2);
-        vip.setBirthday(new SimpleDateFormat("yyyy-MM-dd").parse("2000-10-20"));
-        clientDao.updateNormalVipMessage(vip);
+        String phoneNumber = "13927501600";
+        NormalClient normalClient = clientDao.getNormalClient(phoneNumber);
+        Date birthday = DateUtils.createDate(1996, 10, 20);
+        NormalVip normalVip = new NormalVip();
+        normalVip.setVipGrade(1);
+        normalVip.setNormalClient(normalClient);
+        normalVip.setBirthday(birthday);
+
+        clientDao.addNormalVip(normalVip);
     }
 
     @Test
-    public void getClientsTest() throws Exception{
+    public void addNormalVip_duplicateTest() throws Exception {
 
-        System.out.println(clientDao.getClients(1,2).getClass());
+        String phoneNumber = "13927501600";
+        NormalClient normalClient = clientDao.getNormalClient(phoneNumber);
+        Date birthday = new Date(1910, 3, 3);
+        NormalVip normalVip = new NormalVip();
+        normalVip.setVipGrade(1);
+        normalVip.setNormalClient(normalClient);
+        normalVip.setBirthday(birthday);
+
+        clientDao.addNormalVip(normalVip);
     }
 
     @Test
-    public void getNormalVipsTest() throws Exception{
+    public void getNormalVip() throws Exception {
 
-        System.out.println(clientDao.getNormalVips(0,1));
+        String phoneNumber = "13927501600";
+//        System.out.println(clientDao.getNormalVip(phoneNumber));
+
+        Assert.assertEquals("NormalVip{normalClient=NormalClient{, clientName='Xihao', isMan=false, identityId='123123132', phoneNumber='13927501600', creditPoint=120.0}, vipGrade=1, birthday=Tue Apr 03 00:00:00 CST 3810}",
+                clientDao.getNormalVip(phoneNumber).toString());
     }
 
     @Test
-    public void getCompanyVipsTest() throws Exception{
+    public void getNormalVip_nullTest() throws Exception {
 
-        System.out.println(clientDao.getCompanyVips(0,1));
+        String phoneNumebr = "139222";
+        Assert.assertEquals(null,clientDao.getNormalVip(phoneNumebr));
+    }
+
+    @Test
+    public void addCompanyVip() throws Exception {
+
+        String phoneNumber = "13927501600";
+        NormalClient normalClient = clientDao.getNormalClient(phoneNumber);
+        CompanyVip companyVip = new CompanyVip();
+        Company company = new Company();
+        company.setCompanyName("我好公司");
+        company.setConcreteAddress("南京大学旁");
+        company.setCbd("仙林");
+        company.setCity("南京市");
+        company.setProvince("江苏省");
+
+        companyDao.addCompany(company);
+        companyVip.setCompany(company);
+        companyVip.setNormalClient(normalClient);
+        clientDao.addCompanyVip(phoneNumber, company.getCompanyId());
+    }
+
+    @Test
+    public void getCompanyVipTest() throws Exception {
+
+        String phoneNumber = "13927501600";
+//        System.out.println(clientDao.getCompanyVip(phoneNumber));
+        Assert.assertEquals("CompanyVip{normalClient=NormalClient{clientName='Xihao', isMan=false, identityId='123123132', phoneNumber='13927501600', creditPoint=120.0}, company=Company{province='江苏省', city='南京市', cbd='仙林', concreteAddress='南京大学旁', companyId=2, companyName='我好公司'}}",
+                clientDao.getCompanyVip(phoneNumber).toString());
+    }
+
+    @Test
+    public void getCompanyVip_null() throws Exception {
+
+        String phoneNumber = "13232";
+        Assert.assertNull(clientDao.getCompanyVip(phoneNumber));
+    }
+
+    @Test
+    public void getClients() throws Exception {
+
+        int offset = 2;
+        int limit = 2;
+//        System.out.println(clientDao.getClients(offset, limit));
+        Assert.assertEquals("[NormalClient{, clientName='xihao', isMan=true, identityId='123456789123456798', phoneNumber='13927501604', creditPoint=100.0}, NormalClient{, clientName='xihao', isMan=true, identityId='123456789123456798', phoneNumber='13927501605', creditPoint=0.0}]",
+                clientDao.getClients(offset, limit));
     }
 }

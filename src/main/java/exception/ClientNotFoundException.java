@@ -6,7 +6,7 @@ package exception;
 public class ClientNotFoundException extends RuntimeException{
 
     private int state;
-    private long clientId;
+    private String phoneNumber;
 
     /**
      * Constructs a new runtime exception with {@code null} as its
@@ -14,17 +14,16 @@ public class ClientNotFoundException extends RuntimeException{
      * initialized by a call to {@link #initCause}.
      * default state is 10010001
      */
-    public ClientNotFoundException(long clientId) {
+    public ClientNotFoundException(String phoneNumber) {
         this.state = 10010001;
-        this.clientId = clientId;
+        this.phoneNumber = phoneNumber;
     }
 
     public int getState() {
         return state;
     }
 
-    public long getClientId() {
-        return clientId;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
-
 }

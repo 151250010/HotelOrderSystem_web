@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * Created by xihao on 17-3-25.
+ *数据层接口
  */
 @Repository
 public interface ClientDao {
@@ -18,14 +18,14 @@ public interface ClientDao {
     /**
      * get all property when trying to get only a property because java highlights object
      * so that I decide to get the object
-     * @param clientId
+     * @param phoneNumber 客户手机号
      * @return
      */
-    NormalClient getNormalClient(long clientId);
+    NormalClient getNormalClient(String phoneNumber);
 
-    NormalVip getNormalVip(long clientId);
+    NormalVip getNormalVip(String phoneNumber);
 
-    CompanyVip getCompanyVip(long clientId);
+    CompanyVip getCompanyVip(String phoneNumber);
 
     void addNormalClient(NormalClient client);
 
@@ -34,7 +34,7 @@ public interface ClientDao {
     /**
      * 添加企业会员，数据层操作确认传入的company存在并且client有效
      */
-    void addCompanyVip(@Param("clientId") long clientId,@Param("companyId")long companyId);
+    void addCompanyVip(@Param("phoneNumber")String phoneNumber,@Param("companyId")long companyId);
 
     /**
      * normally cover all the columns though only a property has been changed
@@ -57,6 +57,5 @@ public interface ClientDao {
     List<NormalVip> getNormalVips(@Param("offsets") int offsets,@Param("limit") int limit);
 
     List<CompanyVip> getCompanyVips(@Param("offsets") int offsets, @Param("limit") int limit);
-
 
 }

@@ -17,18 +17,20 @@ import java.lang.reflect.Method;
 
 /**
  *the aspect to check token
+ * each time to access the website,front end should contain a header names "X-Token",and value could get from cookie
+ * so that you would have the permission.
  */
 @Aspect
 @Component
 public class SecurityAspect {
 
-    private static final String DEFAULT_TOKEN_NAME = "X-Token";
+    public static final String DEFAULT_TOKEN_NAME = "X-Token";
 
     @Autowired
     private TokenManager tokenManager;
 
-    @Pointcut("@annotation(org.springframework.web.bind.annotation.RequestMapping)")
-    public void request(){}; //代表了每次的请求
+    @Pointcut("execution(* controllers.*.*.*(..))")
+    public void request(){} //所有的请求都需要验证，可以使用IgnoreSecurity注解忽略验证
 
     @Around("request()")
     public Object execute(ProceedingJoinPoint joinPoint) throws Throwable {
@@ -43,7 +45,7 @@ public class SecurityAspect {
         }
 
         String token = SysContent.getRequest().getHeader(DEFAULT_TOKEN_NAME);
-
+        //System.out.println("Could go here!"+"Token:"+token);
         if (!tokenManager.checkToken(token)) {
             return new BaseResult<Object>(false, "You don't have enough role to access the website,please login first!");
         }

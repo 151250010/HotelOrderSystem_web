@@ -5,6 +5,7 @@ import dto.BaseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import service.account.AccountService;
+import token.IgnoreSecurity;
 import utils.sha.SHA;
 
 /**
@@ -15,7 +16,7 @@ import utils.sha.SHA;
 public class AccountController {
 
     @Autowired
-    AccountService accountService;
+    private AccountService accountService;
 
     @PostMapping
     public BaseResult postAccount(@RequestBody JSONObject jsonObject) {

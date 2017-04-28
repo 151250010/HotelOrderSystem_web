@@ -19,11 +19,11 @@ public class SysContent {
         return responseThreadLocal.get();
     }
 
-    public static void setRequest(HttpServletRequest request) {
+    static void setRequest(HttpServletRequest request) {
         requestThreadLocal.set(request);
     }
 
-    public static void setResponse(HttpServletResponse response) {
+    static void setResponse(HttpServletResponse response) {
         responseThreadLocal.set(response);
     }
 }

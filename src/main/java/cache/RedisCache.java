@@ -3,11 +3,15 @@ package cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
-import utils.ProtoStuffSeralizerUtil;
+import utils.ProtoStuffSerializerUtil;
+
+import java.util.Set;
 
 /**
  * redis cache
+ * Am I accessing connection only through RedisTemplate?
  */
 @Component
 public class RedisCache {
@@ -16,7 +20,7 @@ public class RedisCache {
     public final static int CACHETIME = 60; //default cache time is 60 seconds
 
     @Autowired
-    private RedisTemplate<String, String> redisTemplate; //the template of spring to operate redis
+    private StringRedisTemplate redisTemplate; //default use StringRedisTemplate
 
     /**
      * 添加缓存
@@ -25,11 +29,11 @@ public class RedisCache {
      * @param <T> 键值的泛型
      * @return
      */
-    public <T> boolean putCache(String key, T obj) {
+    <T> void putCache(String key, T obj) {
 
         final byte[] bKey = key.getBytes();
-        final byte[] bValue = ProtoStuffSeralizerUtil.serialize(obj);
-        return redisTemplate.execute((RedisCallback<Boolean>) redisConnection -> redisConnection.setNX(bKey, bValue));
+        final byte[] bValue = ProtoStuffSerializerUtil.serialize(obj);
+        redisTemplate.execute((RedisCallback<Object>) redisConnection -> redisConnection.setNX(bKey, bValue));
     }
 
     /**
@@ -42,7 +46,7 @@ public class RedisCache {
     public <T> void putCacheWithExpireTime(String key, T obj, final long expireTime) {
 
         final byte[] bKey =key.getBytes();
-        final byte[] bValue = ProtoStuffSeralizerUtil.serialize(obj);
+        final byte[] bValue = ProtoStuffSerializerUtil.serialize(obj);
         redisTemplate.execute((RedisCallback<Boolean>) redisConnection -> {
             redisConnection.setEx(bKey, expireTime, bValue);
             return true;
@@ -64,14 +68,32 @@ public class RedisCache {
             return null;
         }
 
-        return ProtoStuffSeralizerUtil.deSerialize(result, targetClass);
+        return ProtoStuffSerializerUtil.deSerialize(result, targetClass);
     }
 
     /**
      * 精确删除key
      * @param key
      */
-    public void deleteKey(String key) {
-        redisTemplate.delete(key);
+    void deleteCache(String key) {
+        redisTemplate.execute((RedisCallback<Object>) redisConnection -> redisConnection.del(key.getBytes()));
+    }
+
+    /**
+     * 模糊删除key
+     * @param pattern key的模板
+     *
+     */
+    void deleteCacheWithPattern(String pattern) {
+
+        Set<String> keys = redisTemplate.keys(pattern);
+        keys.forEach(key-> redisTemplate.execute((RedisCallback<Object>) redisConnection -> redisConnection.del(key.getBytes())));
+    }
+
+    /**
+     * 清空缓存
+     */
+    void deleteAllCache() {
+        deleteCacheWithPattern("*");
     }
 }

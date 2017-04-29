@@ -7,8 +7,9 @@ import com.dyuproject.protostuff.runtime.RuntimeSchema;
 
 /**
  * 序列化对象的工具类
+ * 不使用java自带的序列化机制，使用ProtoStuff提高性能
  */
-public class ProtoStuffSeralizerUtil {
+public class ProtoStuffSerializerUtil {
 
     /**
      * 序列化对象
@@ -19,7 +20,7 @@ public class ProtoStuffSeralizerUtil {
     public static <T> byte[] serialize(T obj) {
 
         if (obj == null) {
-            throw new RuntimeException("序列化对象(" + obj + ") 为空！");
+            throw new RuntimeException("序列化对象为空！");
         }
 
         Schema<T> schema = (Schema<T>) RuntimeSchema.getSchema(obj.getClass());

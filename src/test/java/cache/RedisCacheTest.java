@@ -44,7 +44,12 @@ public class RedisCacheTest {
 
     @Test
     public void deleteKey() throws Exception {
-        redisCache.deleteKey("firstClient");
+        redisCache.deleteCache("firstClient");
     }
 
+    @Test
+    public void deleteWithPatternTest() {
+
+        redisCache.deleteCacheWithPattern("*");
+    }
 }

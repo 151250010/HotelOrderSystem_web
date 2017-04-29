@@ -29,7 +29,7 @@
     </bean>
 
     <!--配置redisTemplate模板-->
-    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
         <property name="connectionFactory" ref="jedisConnectionFactory"/>
     </bean>
 
